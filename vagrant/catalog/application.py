@@ -6,20 +6,39 @@ from flask import session as login_session
 import random,string
 
 from database_setup import  Categories, Base, Item, User
+import databaseController as dc
 
 app = Flask(__name__)
 
 @app.route('/')
 def home():
+    cates = dc.getAllCategories()
+    items = dc.getAllItems()
     output = "<h1>Hi,Welcome</h1>"
+    output += "<ol>"
+    for c in cates:
+        output += "<li>%s</li>"%c.name
+    output += "</ol>"
+    output += "<ol>"
+    for i in items:
+        output += "<li>%s</li>"%i.name
+    output += "</ol>"
     return output
 @app.route('/catalog/<catalog>/items')
 def items(catalog):
+    cid = dc.getCategoriesIdByName(catalog)
+    items = dc.getItemsByCatId(cid)
     output ="<p>%s items here</p>"%catalog
+    output += "<ol>"
+    for i in items:
+        output += "<li>%s</li>"%i.name
+    output += "</ol>"
     return output
 @app.route('/catalog/<catalog>/<item>')
 def description(catalog,item):
+    des = dc.getItemDescriptionByName(catalog,item)
     output = "<p>%s %s description here</p>"%(catalog,item)
+    output += "<p>%s</p>"%des
     return output
 @app.route('/catalog/<item>/edit')
 def edit(item):
