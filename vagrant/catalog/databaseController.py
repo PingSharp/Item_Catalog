@@ -38,9 +38,17 @@ def getItemsByCatId(cId):
 def getCategoriesIdByName(cName):
     cid = session.query(Categories).filter_by(name = cName).one().id
     return cid
-
+def getCategoryByName(cName):
+    category = session.query(Categories).filter_by(name=cName).one()
+    return category
 #get Item description from item name and category name
 def getItemDescriptionByName(cName,iName):
     cid = getCategoriesIdByName(cName)
-    itemdes = session.query(Item).filter_by(name = iName).filter_by(Category_id = cid).one().description 
+    itemdes = session.query(Item).filter_by(name = iName).filter_by(Category_id = cid).first().description 
     return itemdes
+
+def addNewItem(iName,iDes,categoryName):
+    cate = getCategoryByName(categoryName)
+    item = Item(name=iName,description=iDes,categories=cate)
+    session.add(item)
+    session.commit()
