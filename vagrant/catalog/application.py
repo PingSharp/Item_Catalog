@@ -9,26 +9,27 @@ from database_setup import  Categories, Base, Item, User
 import databaseController as dc
 
 app = Flask(__name__)
+#rendering css file on time
+@app.context_processor
+def override_url_for():
+    return dict(url_for=dated_url_for)
 
+def dated_url_for(endpoint, **values):
+    if endpoint == 'static':
+        filename = values.get('filename', None)
+        if filename:
+            file_path = os.path.join(app.root_path,
+                                     endpoint, filename)
+            values['q'] = int(os.stat(file_path).st_mtime)
+    return url_for(endpoint, **values)
 
 @app.route('/')
 def home():
     cates = dc.getAllCategories()
     items = dc.getAllItems()
-    output = "<h1>Hi,Welcome</h1>"
-    output += "<ol>"
-    for c in cates:
-        output += "<li><a href='http://localhost:9000/catalog/%s/items'>%s</a></li>"%(c.name,c.name)
-    output += "</ol>"
-    output += "<a href='http://localhost:9000/catalog/add'>Add Item</a>"
-    output += "<ol>"
-    for i in items:
-        cate = dc.getCategotyById(i.Category_id)
-        output += "<li><a href='http://localhost:9000/catalog/%s/%s'>%s</a></li>"%(cate.name,i.name,i.name)
-    output += "</ol>"
-    return output
+    return render_template("home.html",categories=cates,listItems = items)
 @app.route('/catalog/<catalog>/items')
-def items(catalog):
+def showItems(catalog):
     cid = dc.getCategoriesIdByName(catalog)
     items = dc.getItemsByCatId(cid)
     output ="<p>%s items here</p>"%catalog
@@ -116,5 +117,5 @@ def json():
     return a
 if __name__ == '__main__':
     app.secret_key = 'super_secret_key'
-    app.debug = False
+    app.debug = True
     app.run(host='127.0.0.1',port = 9000)

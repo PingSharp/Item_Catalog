@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel=stylesheet type=text/css href="{{ url_for('static',filename='main.css') }}">
+    </head>
+    <body>
+        <div id="main_header">
+        <h1>Catalog App</h1>
+        </div>
+        <div id="main_content">
+        <div class="content">
+        <h2 class="header">categories</h2>
+        {% if categories %}
+        <ol class="list">
+            {% for c in categories %}
+            <li><a href="{{url_for('showItems',catalog=c.name)}}">{{c.name}}</a></li>
+            {% endfor %}
+        </ol>
+        {% endif %}
+        </div>
+        <div class="content">
+        <a id="add_item" href="{{url_for('add')}}">add item</a>
+        <h2 class="header">Latest Items</h2>
+        {% if listItems %}
+
+        <ol class="list">
+            {% for i in listItems %}
+            <li><a href="{{url_for('description',catalog=i.categories.name,item=i.name)}}">{{ i.name }}</a><span>({{i.categories.name}})</span></li>
+            {% endfor %}
+        </ol>
+        {% endif %}
+        </div>
+        </div>
+    </body>
+</html>
