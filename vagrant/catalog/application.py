@@ -111,8 +111,9 @@ def add():
      
 @app.route('/catalog.json')
 def json():
-    output ="<p>all catalogies and items in json </p>"
-    return output
+    cates = dc.getAllCategories()
+    a = jsonify(Category=[c.serialize for c in cates])
+    return a
 if __name__ == '__main__':
     app.secret_key = 'super_secret_key'
     app.debug = False

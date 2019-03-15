@@ -13,7 +13,24 @@ class Categories(Base):
     __tablename__ = 'categories'
     id = Column(Integer,primary_key=True)
     name = Column(String(80),nullable = False)
+    items = relationship("Item", lazy='joined')
+    @property
+    def serialize(self):        
+        puffer = {
+           
+        } 
+        if len(self.items)>0:
+            puffer["id"] = self.id
+            puffer["category_name"] = self.name
+            length = len(self.items)
+            puffer["item"]=[]
+            for i in range(length):
+                puffer["item"].append(self.items[i].serialize)
+        else:
+            puffer["id"] = self.id
+            puffer["name"] = self.name
 
+        return puffer
 class Item(Base):
     __tablename__ = 'item'
     id = Column(Integer,primary_key = True)
@@ -23,7 +40,14 @@ class Item(Base):
         Integer,ForeignKey('categories.id')
     )
     categories = relationship("Categories")
-    
+    @property
+    def serialize(self):
+        return {
+            'name' : self.name,
+            'description' : self.description,
+            'id' : self.id,
+            'Category_id' : self.Category_id
+        }
 class User(Base):
     __tablename__ = 'user'
     id = Column(Integer,primary_key = True)
