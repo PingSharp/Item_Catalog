@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel=stylesheet type=text/css href="{{ url_for('static',filename='main.css') }}">
+    </head>
+    <body>
+            <div id="main_header">
+                    <h1>Catalog App</h1>
+            </div>
+            <div id="main_content">
+                <div class="edit_content">
+                    <h2 class="header">Edit Item </h2>
+                    <form  method='POST'>
+                    <label for="item_name">Title</label>
+                    <input name='name' type='text' value='{{thisitem.name}}' id="item_name">
+                    <label for="item_des">Description</label>
+                    <input name='description' type='text' value='{{thisitem.description}}' id="item_des">
+                    <label for="item_cate">Category</label>
+                    <select name='catalog' id="item_cate">
+                        {% for c in categories %}
+                        {% if c.id==cId %}
+                        <option value='{{c.name}}' selected>{{c.name}}</option>
+                        {% endif %}
+                        <option value='{{c.name}}'>{{c.name}}</option>
+                        {% endfor %}
+                    </select>
+                    <input type='submit' value='Edit' id="submitButton">
+                    </form>
+                </div>
+            </div>
+    </body>
+</html>

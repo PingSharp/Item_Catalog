@@ -8,28 +8,60 @@
         <h1>Catalog App</h1>
         </div>
         <div id="main_content">
-        <div class="content">
-        <h2 class="header">categories</h2>
+               
+        {% if description %}
+            <div class="description">
+                <h2 class="header">{{return_item}}</h2>
+                <p class="des">description:{{description}}</p>
+                <div class="link">
+                <a href="{{url_for('edit',item=return_item)}}">edit</a><span>|</span><a href="{{url_for('delete',item=return_item)}}">delete</a>
+                </div>
+            </div>
+        {% endif %}
         {% if categories %}
+        <div class="content">
+       
+        <h2 class="header">categories</h2>
+        
         <ol class="list">
             {% for c in categories %}
             <li><a href="{{url_for('showItems',catalog=c.name)}}">{{c.name}}</a></li>
             {% endfor %}
         </ol>
-        {% endif %}
+       
         </div>
+        {% endif %}
+        {% if listItems %}
         <div class="content">
         <a id="add_item" href="{{url_for('add')}}">add item</a>
+        {% if cata %}
+        <h2 class="header">{{cata}} Items({{listItems.count()}} {{"items" if listItems.count()>1 else "item"}})</h2>
+       
+        {% else %}
         <h2 class="header">Latest Items</h2>
-        {% if listItems %}
+        {% endif %}
+       
 
         <ol class="list">
             {% for i in listItems %}
             <li><a href="{{url_for('description',catalog=i.categories.name,item=i.name)}}">{{ i.name }}</a><span>({{i.categories.name}})</span></li>
             {% endfor %}
         </ol>
+       
+        </div>
         {% endif %}
+       
         </div>
-        </div>
+        <footer>
+                {% with messages = get_flashed_messages() %}  
+                {% if messages %}
+                <ul>
+                    {% for message in messages%}
+                        <li id="message"><strong>{{message}}</strong></li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
+                {% endwith %}
+        </footer>
     </body>
 </html>

@@ -27,6 +27,15 @@ body{
     border-left-color: lightgrey;
     border-left-width: 1px;
 }
+.description{
+    width: 100%;
+    background-color:whitesmoke;
+   
+}
+.des{
+    margin-left: 40px;
+    font-family: sans-serif;
+}
 .header{
     color: rgb(21, 21, 75);
     font-family: sans-serif;
@@ -49,4 +58,33 @@ a{
 }
 span{
     color: gray;
+}
+.link{
+    margin-left: 40px;
+}
+form{
+    margin-left: 40px;
+    display: grid;
+    width: 90%;
+}
+input{
+    margin-bottom: 10px;
+}
+select{
+    margin-bottom: 10px;
+}
+label{
+    font-family: sans-serif;
+}
+#submitButton{
+    margin-bottom: 20px;
+}
+.edit_content{
+    background-color: whitesmoke;
+    width: 100%;
+}
+ul{
+    list-style: none;
+    margin-left: 40px;
+    font-family: sans-serif;
 }
