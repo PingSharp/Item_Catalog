@@ -4,9 +4,15 @@
         <link rel=stylesheet type=text/css href="{{ url_for('static',filename='main.css') }}">
     </head>
     <body>
-            <div id="main_header">
-                    <h1>Catalog App</h1>
-            </div>
+        <div id="main_header">
+            <h1>Catalog App</h1>
+            {% if logedIn==True %}
+                <div id="signoutButton"><button type="button" onclick="signOut()">Logout</button></div>
+            {%  endif %}
+            {% if userName %}
+            <div id="greeting"><p>Hello!{{userName}}</p></div>
+            {% endif %}
+        </div>
             <div id="main_content">
                 <div class="edit_content">
                     <h2 class="header">Delete Item </h2>

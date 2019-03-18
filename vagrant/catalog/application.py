@@ -43,7 +43,7 @@ def home():
     cates = dc.getAllCategories()
     items = dc.getAllItems()
     if 'username' in login_session and 'user_id' in login_session:
-        return render_template("home.html",categories=cates,listItems = items,STATE=state,logedIn=True)
+        return render_template("home.html",categories=cates,listItems = items,STATE=state,logedIn=True,userName=login_session['username'])
     else:
         return render_template("home.html",categories=cates,listItems = items,STATE=state,logedIn=False)
 @app.route('/gconnect',methods=['POST'])
@@ -157,7 +157,7 @@ def showItems(catalog):
     cid = dc.getCategoriesIdByName(catalog)
     items = dc.getItemsByCatId(cid)
     if 'username' in login_session and 'user_id' in login_session:
-        return render_template("home.html",categories=cates,listItems = items,cata=catalog,logedIn=True)
+        return render_template("home.html",categories=cates,listItems = items,cata=catalog,logedIn=True,userName=login_session['username'])
     else:
         return render_template("home.html",categories=cates,listItems = items,cata=catalog,logedIn=False)
 
@@ -165,7 +165,7 @@ def showItems(catalog):
 def description(catalog,item):
     des = dc.getItemDescriptionByName(catalog,item)
     if 'username' in login_session and 'user_id' in login_session:
-        return render_template("home.html",description = des,return_item = item,logedIn=True)
+        return render_template("home.html",description = des,return_item = item,logedIn=True,userName=login_session['username'])
     else:
         return render_template("home.html",description = des,return_item = item,logedIn=False)
 @app.route('/catalog/<item>/edit',methods=['GET','POST'])
@@ -175,44 +175,44 @@ def edit(item):
         cates = dc.getAllCategories()
         cateId = dc.getCategotyById(thisItem.Category_id).id
         if request.method == 'GET':
-            return render_template("edit.html",thisitem=thisItem,categories=cates,cId=cateId)
+            return render_template("edit.html",thisitem=thisItem,categories=cates,cId=cateId,logedIn=True,userName=login_session['username'])
         elif request.method == 'POST':
             iName = request.form['name']
             iDes = request.form['description'] 
             iCate = request.form['catalog']
             dc.editItem(iName,iDes,iCate,item)
-            flash("You have edited this item succesfully!")
+            flash("You have edited this item successfully!")
             return redirect(url_for("home"))
     else:
-        return redirect(url_for(home))
+        return redirect(url_for("home"))
 
 @app.route('/catalog/<item>/delete',methods=['GET','POST'])
 def delete(item):
     if 'username' in login_session and 'user_id' in login_session:
         thisItem = dc.getItemByItemName(item)
         if request.method == 'GET':
-            return render_template("delete.html",thisitem=thisItem)
+            return render_template("delete.html",thisitem=thisItem,logedIn=True,userName=login_session['username'])
         elif request.method == 'POST':
             dc.deleteItem(thisItem)
-            flash("You have deleted this item succesfully!")
+            flash("You have deleted this item successfully!")
             return redirect(url_for("home"))
     else:
-        return redirect(url_for(home))
+        return redirect(url_for("home"))
 @app.route('/catalog/add',methods=['GET','POST'])
 def add():
     if 'username' in login_session and 'user_id' in login_session:
         cates = dc.getAllCategories()
         if request.method == 'GET':
-            return render_template("add.html",categories=cates)
+            return render_template("add.html",categories=cates,logedIn=True,userName=login_session['username'])
         elif request.method == 'POST':
             iName = request.form['name']
             iDes = request.form['description']
             iCate = request.form['catalog']
             dc.addNewItem(iName,iDes,iCate)
-            flash("You have added the new item succesfully!")
+            flash("You have added the new item successfully!")
             return redirect(url_for("home"))
     else:
-        return redirect(url_for(home))
+        return redirect(url_for("home"))
      
 @app.route('/catalog.json')
 def jsondata():

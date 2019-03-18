@@ -16,6 +16,9 @@
         <div id="signinButton">
         </div>
         {%  endif %}
+        {% if userName %}
+        <div id="greeting"><p>Hello!{{userName}}</p></div>
+        {% endif %}
         </div>
         <div id="main_content">
                
@@ -143,7 +146,7 @@
                                                                 
                                                          }
                                                         // window.location.href = "/restaurants/";
-                                                },2000); 
+                                                },1000); 
                                         }
                                         else{
                                                 
