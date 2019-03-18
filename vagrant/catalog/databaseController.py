@@ -70,3 +70,21 @@ def editItem(iName,iDes,iCate,thisItem):
 def deleteItem(dItem):
     session.delete(dItem)
     session.commit()
+#create and save new user if the user is not in the data base
+def createUser(login_session):
+    userExist = getUserId(login_session['email'])
+    if(userExist == None):
+        addNewUser(login_session['username'],login_session['email'],login_session['picture'])
+        login_session['user_id'] = getUserId(login_session['email']).id
+    else:
+        print "User exist!id:%s"%userExist.id
+        login_session['user_id'] = userExist.id
+#get user from user's email
+def getUserId(uEmail):
+    user = session.query(User).filter_by(email=uEmail).first()
+    return user
+#add new user to the data base
+def addNewUser(uName,uEmail,uPic):
+    newUser = User(username=uName,email=uEmail,picture=uPic)
+    session.add(newUser)
+    session.commit()

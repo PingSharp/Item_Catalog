@@ -88,3 +88,21 @@ ul{
     margin-left: 40px;
     font-family: sans-serif;
 }
+#signinButton{
+    position: absolute;
+    top: 30px;
+    right: 30px;
+}
+#signoutButton{
+    position: absolute;
+    top: 30px;
+    right: 30px;
+}
+button{
+    border-radius: 2px;
+    background-color: orangered;
+    color: whitesmoke;
+    font-size: 1.2em;
+    border-style: hidden;
+    padding: 5px;
+}

@@ -1,11 +1,21 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <meta name="google-signin-client_id" content="1005389411608-d1fkso26mdmsmu7cp2ctoen1ela522er.apps.googleusercontent.com">
         <link rel=stylesheet type=text/css href="{{ url_for('static',filename='main.css') }}">
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js">
+        </script>
+        <script src="//apis.google.com/js/platform.js?onload=renderButton" async defer> </script>
     </head>
     <body>
         <div id="main_header">
         <h1>Catalog App</h1>
+        {% if logedIn==True %}
+            <div id="signoutButton"><button type="button" onclick="signOut()">Logout</button></div>
+        {% else %}
+        <div id="signinButton">
+        </div>
+        {%  endif %}
         </div>
         <div id="main_content">
                
@@ -13,9 +23,11 @@
             <div class="description">
                 <h2 class="header">{{return_item}}</h2>
                 <p class="des">description:{{description}}</p>
+                {% if logedIn==True %}
                 <div class="link">
                 <a href="{{url_for('edit',item=return_item)}}">edit</a><span>|</span><a href="{{url_for('delete',item=return_item)}}">delete</a>
                 </div>
+                {% endif %}
             </div>
         {% endif %}
         {% if categories %}
@@ -33,7 +45,9 @@
         {% endif %}
         {% if listItems %}
         <div class="content">
+        {% if logedIn==True %}
         <a id="add_item" href="{{url_for('add')}}">add item</a>
+        {% endif %}
         {% if cata %}
         <h2 class="header">{{cata}} Items({{listItems.count()}} {{"items" if listItems.count()>1 else "item"}})</h2>
        
@@ -63,5 +77,83 @@
                 {% endif %}
                 {% endwith %}
         </footer>
+        <script>
+            function renderButton(){
+                gapi.signin2.render('signinButton',{
+                    'scope':"openid email",
+                    'theme': 'dark',
+              'redirecturi':"postmessage",
+              'accesstype':"offline",
+              'cookiepolicy':"single_host_origin",
+              'onsuccess':"signInCallback",
+              'onfailure': 'onFailure',
+              'approvalprompt':"force"
+                })
+            }
+            function onFailure(error) {
+      console.log(error);
+    }
+            function signInCallback(authResult){
+                if(authResult['code']){
+                        $("#signinButton").attr("style","display: none");
+                        $.ajax({
+                                type: "POST",
+                                url: "/gconnect?state={{STATE}}",
+                                processData: false,
+                                contentType: "application/octet-stream; charset=utf-8",
+                                data: authResult['code'],
+                                success: function(result){
+                                        if (result) {
+                                                 setTimeout(function(){
+                                                         console.log(result);
+                                                         if(result==='LogedIn'){ 
+                                                                 document.location.reload();
+                                                         }
+                                                         else{
+                                                                
+                                                         }
+                                                        // window.location.href = "/restaurants/";
+                                                },2000); 
+                                        }
+                                        else{
+                                                
+                                        }
+                                }
+                        })
+                }
+                else if(authResult['error']){
+                        console.log("There was a error:"+authResult['error'])
+                }
+            }
+            function signOut(){
+                $.ajax({
+                    type: "POST",
+                                url: "/gdisconnect",
+                                processData: false,
+                                contentType: "application/octet-stream; charset=utf-8",
+                                success: function(result){
+                                    if (result) {
+                
+                                                 setTimeout(function(){
+                                                         console.log(result);
+                                                         if(result==='LogedOut'){
+                                                                 document.location.reload();  
+                                                         }
+                                                         else{
+                                                                
+                                                         }
+                                                        // window.location.href = "/restaurants/";
+                                                },2000); 
+                                        }
+                                        else{
+                                                
+                                        }
+                                },
+                                error: function(error){
+                                    console.log(error);
+                                }
+                })
+            }
+    </script>
     </body>
 </html>
