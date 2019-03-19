@@ -22,10 +22,10 @@ app = Flask(__name__)
 CLIENT_ID = json.loads(
     open('client_secret.json', 'r').read()
 )['web']['client_id']
-APPLICATION_NAME = "Restaurant Menu Application"
+APPLICATION_NAME = "YourApplicationName"
+
+
 # rendering css file on time
-
-
 @app.context_processor
 def override_url_for():
     return dict(url_for=dated_url_for)
@@ -89,7 +89,7 @@ def gconnect():
     access_token = credentials.access_token
     # make a request to try to get the token informations
     url = (
-        'https://www.googleapis.com/oauth2/v1/tokeninfo?access_token= %s '
+        'https://www.googleapis.com/oauth2/v1/tokeninfo?access_token=%s'
         % access_token)
     h = httplib2.Http()
     res = h.request(url, 'GET')[1]
@@ -290,5 +290,5 @@ def jsondata():
     return a
 if __name__ == '__main__':
     app.secret_key = 'super_secret_key'
-    app.debug = False
-    app.run(host='127.0.0.1', port=8000)
+    app.debug = True
+    app.run(host='0.0.0.0', port=8000)
